@@ -46,6 +46,7 @@
     hypridle
     hyprlock
     hyprpaper
+    kitty
     mako
     waybar
     wlogout
