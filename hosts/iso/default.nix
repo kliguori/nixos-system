@@ -7,7 +7,7 @@
   
   # System version
   system.stateVersion = "25.11";
-  
+
   # ISO label
   isoImage.isoName = "nixos-custom-installer-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.iso";
   
@@ -24,7 +24,6 @@
   users.users.root.password = "nixos";
   
   # Networking
-  networking.wireless.enable = false;  # Disable if using NetworkManager
   networking.networkmanager.enable = true;
   
   # Include useful tools
