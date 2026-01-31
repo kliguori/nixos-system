@@ -1,5 +1,3 @@
-{ config, lib, pkgs, users ? [], ... }:
-
 let
   userDatasets = builtins.listToAttrs (map (user: {
     name = user;
