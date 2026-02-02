@@ -6,7 +6,6 @@
     inputs.nixos-hardware.nixosModules.common-cpu-amd
     inputs.nixos-hardware.nixosModules.common-pc-laptop
     ./boot.nix
-    ./disko.nix
     ../common
   ];
 
