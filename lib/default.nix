@@ -1,6 +1,5 @@
 { inputs }:
 
 {
-  # System building functions
-  systems = import ./systems.nix { inherit inputs; };
+  mkSystems = import ./mkSystems.nix { inherit inputs; };
 }

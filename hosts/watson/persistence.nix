@@ -26,7 +26,7 @@
       "/etc/ssh/ssh_host_rsa_key.pub"
     ];
   };
-  
+
   # Required for impermanence
   programs.fuse.userAllowOther = true;
 }

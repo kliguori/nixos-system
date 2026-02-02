@@ -5,16 +5,8 @@
     isNormalUser = true;
     description = "Kevin Liguori";
     extraGroups = [ "wheel" "networkmanager" ];
-    password = "nixos";
-    # hashedPasswordFile = config.age.secrets.kevin-password.path;
+    hashedPassword = "$6$UZmN9CmJmm2mYMVc$Ia3O4psbyXfjM59NEbZY5PBfy.IxIA8yta9F9hYOJ4MVuuFwyrRB1E0uysmG5f8Q1mfZjzlLJ0sES1RQymCUt.";
 
-    # Define the secret
-    age.secrets.kevin-password = {
-      file = ../../secrets/kevin-password.age;
-      mode = "0400";
-      owner = "root";
-    };
-    
     # SSH keys
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOavirFl6Xk3GR2bFfGzX28RYqfwld5lnBdSjTTCAV/0 kevin@macbook"

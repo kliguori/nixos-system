@@ -1,31 +1,57 @@
-{ config, lib, pkgs, modulesPath, inputs, hostname, ... }:
+{ config, lib, pkgs, modulesPath, inputs, host, ... }:
 
 {
-  imports = [
+  # --- Imports ---
+  imports = [ 
     (modulesPath + "/installer/scan/not-detected.nix")
     inputs.nixos-hardware.nixosModules.common-cpu-amd
     inputs.nixos-hardware.nixosModules.common-pc-laptop
     ./boot.nix
-    ../common
+    ./persistence.nix
   ];
 
-  # State version
-  system.stateVersion = "25.11";
+  # --- State version ---
+  system.stateVersion = host.stateVersion;
 
-  # Nixpkgs settings
-  nixpkgs = {
-    config.allowUnfree = true;
-    hostPlatform = lib.mkDefault "x86_64-linux";
+  # --- Nixpkgs settings ---
+  nixpkgs.config.allowUnfree = true;
+
+  # --- Nix settings ---
+  nix = {
+    settings = {
+      experimental-features = [ "nix-command" "flakes" ];
+      auto-optimise-store = true;
+      allowed-users = [ "@wheel" ];
+    };
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 7d";
+    };
   };
 
-  # Network settings
-  networking = { 
-    hostName = hostname;
-    hostId = "a8c07b12";  # For ZFS - generate with: head -c4 /dev/urandom | od -An -tx1 | tr -d ' \n'
+  # --- Immuatable users ---
+  users.mutableUsers = false;
+
+  # --- Disable root login ---
+  users.users.root.hashedPassword = "!"; 
+
+  # --- SSH ---
+  services.openssh = {
+    enable = true;
+    settings = {
+      PermitRootLogin = "no";
+      PasswordAuthentication = false;
+    };
   };
 
-  # Programs  
+  # --- Localization ---
+  time.timeZone = lib.mkDefault "America/New_York";
+  i18n.defaultLocale = lib.mkDefault "en_US.UTF-8";
+
+  # --- Programs ---
   programs = {
+    firefox.enable = true;
     thunar.enable = true;
     uwsm.enable = true;
     hyprland = {
@@ -35,11 +61,18 @@
     };
   };
   
-  # Security settings
+  # --- Security settings ---
   security.pam.services.hyprlock = { }; # For hyprlock to work
   
-  # Packages
+  # --- Packages ---
   environment.systemPackages = with pkgs; [
+    vim
+    neovim
+    git
+    wget
+    curl
+    htop
+
     # Hyprland ecosystem
     brightnessctl
     hypridle
@@ -57,10 +90,10 @@
   ];
   
   
-  # Wayland environment
+  # --- Wayland environment settings ---
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
   
-  # Zram settings
+  # --- Zram settings ---
   zramSwap = {
     enable = true;
     memoryPercent = 25;

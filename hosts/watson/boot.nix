@@ -1,31 +1,23 @@
-{ config, lib, pkgs, modulesPath, ... }:
+{ config, lib, pkgs, ... }:
 
-{ 
+{
+  # --- Boot settings ---
   boot = {
-    # --- Kernel options ---
     kernelParams = [
       "zfs.zfs_arc_max=4294967296"  # Limit ZFS ARC to 4GB
     ];
-    kernelModules = [ "kvm-amd" ];
-    extraModulePackages = [ ];
-    
-    # --- Bootloader ---
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
-    
-    # --- ZFS support ---
     supportedFilesystems = [ "zfs" ];
     zfs = {
       # requestEncryptionCredentials = true; # no zfs encryption right now
       extraPools = [ "rpool" ];
     };
-    
-    # --- Initrd configuration ---
     initrd = {
-      supportedFilesystems = [ "zfs" ];
       # luks.devices.cryptroot.device = "/dev/disk/by-partlabel/disk-main-cryptroot"; # no luks encryption right now
+      supportedFilesystems = [ "zfs" ];
       availableKernelModules = [
         "nvme"
         "ehci_pci"

@@ -1,21 +1,10 @@
-{ users ? [] }:
-let
-  userDatasets = builtins.listToAttrs (map (user: {
-    name = user;
-    value = {
-      type = "zfs_fs";
-      mountpoint = "/home/${user}";
-    };
-  }) users);
-in
 {   
   disk.main = {
     device = "/dev/disk/by-id/nvme-SAMSUNG_MZVLB512HBJQ-000L7_S4ENNX1R291121";
     type = "disk";
     content = {
       type = "gpt";
-      partitions = {
-        
+      partitions = {        
         ESP = {
           name = "ESP";
           size = "1G";
@@ -31,7 +20,6 @@ in
             extraArgs = [ "-n" "NIXBOOT" ];
           };
         };
-        
         zfs = {
           name = "zfs";
           size = "100%";
@@ -40,19 +28,16 @@ in
             pool = "rpool";
           };
         };
-        
       };
     };
   };
     
   zpool.rpool = {
     type = "zpool";
-    
     options = {
       ashift = "12";
       autotrim = "on";
     };
-    
     rootFsOptions = {
       mountpoint = "none";
       compression = "zstd";
@@ -60,32 +45,26 @@ in
       xattr = "sa";
       acltype = "posixacl";
     };
-    
-    datasets = {
-      
+    datasets = { 
       root = {
         type = "zfs_fs";
         mountpoint = "/";
         postCreateHook = "zfs snapshot rpool/root@blank";
-        options = {
-          canmount = "noauto";
-        };
+        options = { canmount = "noauto"; };
       };
-      
       nix = {
         type = "zfs_fs";
         mountpoint = "/nix";
-        options = {
-          atime = "off";
-        };
+        options = { atime = "off"; };
       };
-      
+      home = {
+        type = "zfs_fs";
+        mountpoint = "/home";
+      };
       persist = {
         type = "zfs_fs";
         mountpoint = "/persist";
       };
-      
-    } // userDatasets;
-    
+    };
   };
 }
