@@ -7,6 +7,7 @@
     inputs.nixos-hardware.nixosModules.common-cpu-amd
     inputs.nixos-hardware.nixosModules.common-pc-laptop
     ./boot.nix
+    ./networking.nix
     ./persistence.nix
   ];
 
