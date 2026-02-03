@@ -19,13 +19,20 @@
     supportedFilesystems = [ "zfs" ];
     zfs = {
       # requestEncryptionCredentials = true; # no zfs encryption right now
-      extraPools = [ "rpool" ];
+      forceImportAll = true;
+      extraPools = [ 
+        "rpool"
+        "hpool"
+        "dpool"
+        "spool"
+      ];
     };
     initrd = {
       # luks.devices.cryptroot.device = "/dev/disk/by-partlabel/disk-main-cryptroot"; # no luks encryption right now
       supportedFilesystems = [ "zfs" ];
       availableKernelModules = [
         "nvme"
+        "ahci"
         "ehci_pci"
         "xhci_pci"
         "usb_storage"
