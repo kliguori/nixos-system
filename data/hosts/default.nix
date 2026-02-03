@@ -1,4 +1,18 @@
 {
+  sherlock = {
+    hostName = "sherlock";
+    hostId = "d302d58e"; # Generate hostID with: head -c4 /dev/urandom | od -An -tx1 | tr -d ' \n'
+    stateVersion = "25.11";
+    role = "desktop";
+    system = "x86_64-linux";
+    cpu = "amd";
+    sshHostKey = "ssh-ed25519 AAAA... sherlock";
+    extraPools = [];
+    users = [
+      "kevin"
+    ];
+  };
+
    watson = {
     hostName = "watson";
     hostId = "a8c07b12"; # Generate hostID with: head -c4 /dev/urandom | od -An -tx1 | tr -d ' \n'
@@ -9,19 +23,4 @@
       "kevin"
     ];
   };
-
-  # sherlock = {
-  #   hostName = "sherlock";
-  #   hostId = "a8c07b12"; # Generate hostID with: head -c4 /dev/urandom | od -An -tx1 | tr -d ' \n'
-  #   stateVersion = "25.11";
-  #   role = "desktop";
-  #   system = "x86_64-linux";
-  #   cpu = "amd";
-  #   sshHostKey = "ssh-ed25519 AAAA... sherlock";
-  #   extraPools = [];
-  #   users = [
-  #     "kevin"
-  #     "alice"
-  #   ];
-  # };
 }
