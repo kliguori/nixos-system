@@ -8,18 +8,18 @@
     ];
     kernelModules = [ "sg" ];
     loader = {
-      systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
+      systemd-boot = {
+        enable = true;
+        extraInstallCommands = ''
+          chmod 600 $out/loader/random-seed
+        '';
+      };
     };
     supportedFilesystems = [ "zfs" ];
     zfs = {
       # requestEncryptionCredentials = true; # no zfs encryption right now
-      extraPools = [ 
-        "rpool"
-        "hpool"
-        "dpool"
-        "spool"
-      ];
+      extraPools = [ "rpool" ];
     };
     initrd = {
       # luks.devices.cryptroot.device = "/dev/disk/by-partlabel/disk-main-cryptroot"; # no luks encryption right now
