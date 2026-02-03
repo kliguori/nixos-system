@@ -14,7 +14,12 @@
     supportedFilesystems = [ "zfs" ];
     zfs = {
       # requestEncryptionCredentials = true; # no zfs encryption right now
-      extraPools = [ "rpool" ];
+      extraPools = [ 
+        "rpool"
+        "hpool"
+        "dpool"
+        "spool"
+      ];
     };
     initrd = {
       # luks.devices.cryptroot.device = "/dev/disk/by-partlabel/disk-main-cryptroot"; # no luks encryption right now
@@ -30,7 +35,7 @@
       
       # Rollback to blank root on boot
       postDeviceCommands = lib.mkAfter ''
-        zpool import -N rpool
+        zpool import -N -f rpool
         zfs rollback -r rpool/root@blank
       '';
     };

@@ -7,7 +7,6 @@
     system = "x86_64-linux";
     cpu = "amd";
     sshHostKey = "ssh-ed25519 AAAA... sherlock";
-    extraPools = [];
     users = [
       "kevin"
     ];

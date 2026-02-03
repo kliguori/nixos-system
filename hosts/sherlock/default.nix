@@ -152,6 +152,7 @@
     handbrake
 
     # Hyprland related packages
+    kitty
     brightnessctl
     hypridle
     hyprlock
