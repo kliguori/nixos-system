@@ -22,7 +22,7 @@
   outputs = inputs@{ self, nixpkgs, ... }:
   let
     myLib = import ./lib { inherit inputs; };
-    hosts = import ./hosts;  # host definitions
+    hosts = import ./data/hosts;  # host definitions
   in
   {
     nixosConfigurations =  myLib.mkSystems { inherit hosts; };

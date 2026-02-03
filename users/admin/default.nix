@@ -1,7 +1,7 @@
-{ config, lib, pkgs, hostname, ... }:
+{ config, lib, pkgs, ... }:
 
 {
-  users.users.kevin = {
+  users.users.admin = {
     isNormalUser = true;
     description = "admin";
     extraGroups = [ "wheel" "networkmanager" ];
