@@ -51,6 +51,7 @@
 
   # --- Programs ---
   programs = {
+    zsh.enable = true;
     firefox.enable = true;
     thunar.enable = true;
     uwsm.enable = true;
