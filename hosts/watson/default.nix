@@ -1,14 +1,14 @@
 { config, lib, pkgs, modulesPath, inputs, host, ... }:
-
 {
   # --- Imports ---
   imports = [ 
     (modulesPath + "/installer/scan/not-detected.nix")
-    inputs.nixos-hardware.nixosModules.common-cpu-amd
+    inputs.nixos-hardware.nixosModules.common-cpu-intel
     inputs.nixos-hardware.nixosModules.common-pc-laptop
     ./boot.nix
     ./networking.nix
-    ./persistence.nix
+    ./nvidia.nix
+    ./impermanence.nix
   ];
 
   # --- State version ---
@@ -31,18 +31,35 @@
     };
   };
 
-  # --- Immuatable users ---
+  # --- Immutable users ---
   users.mutableUsers = false;
 
   # --- Disable root login ---
   users.users.root.hashedPassword = "!"; 
 
-  # --- SSH ---
-  services.openssh = {
-    enable = true;
-    settings = {
-      PermitRootLogin = "no";
-      PasswordAuthentication = false;
+  # --- Services ---
+  services = {
+    blueman.enable = false; # Disable Blueman service
+    pulseaudio.enable = false; # Disable pulseaudio
+    zfs.autoScrub.enable = true; # Enable automatic scrubbing of ZFS pools
+    tailscale.enable = true; # Enable  tailscale
+    
+    # Enable pipewire
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+      jack.enable = true;
+    }; 
+
+    # Enable SSH
+    openssh = {
+      enable = true;
+      settings = {
+        PermitRootLogin = "no";
+        PasswordAuthentication = false;
+      };
     };
   };
 
@@ -68,27 +85,84 @@
   
   # --- Packages ---
   environment.systemPackages = with pkgs; [
+    # Shell utilities
+    coreutils
+    findutils
+    gnugrep
+    gnused
+    gawk
+    less
+    which
+    file
+    tree
+    diffutils
+    man
+    pciutils
+    unzip
+
+    # Editors
     vim
     neovim
-    git
-    wget
-    curl
-    htop
+    nano
 
-    # Hyprland ecosystem
+    # Networking
+    curl
+    wget
+    dnsutils # Provides dig, nslookup
+    inetutils # Provides host, etc.
+    iproute2
+    iputils
+    nettools # Provides ifconfig, netstat, etc.
+    nmap
+    traceroute
+
+    # Monitoring
+    htop
+    btop
+    fastfetch
+    strace
+    lsof
+    tmux
+    ripgrep
+    fd
+    bat
+    duf
+    ncdu
+
+    # Storage & filesystem tools
+    cryptsetup
+    rsync
+    zfs
+    parted
+    util-linux # Provides mount, umount, lsblk, blkid, etc.
+
+    # Version control & symlinking
+    git
+    stow
+
+    # Virtualisation
+    libvirt
+    virt-manager
+    virt-viewer
+    qemu
+
+    # Transcoding
+    makemkv
+    handbrake
+
+    # Hyprland related packages
+    kitty
     brightnessctl
     hypridle
     hyprlock
     hyprpaper
-    kitty
+    libnotify
     mako
+    networkmanagerapplet
+    pavucontrol
     waybar
     wlogout
     wofi
-    
-    # Desktop apps
-    pavucontrol
-    networkmanagerapplet
   ];
   
   

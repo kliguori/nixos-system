@@ -1,8 +1,17 @@
 { config, lib, pkgs, ... }:
-
 {
-  fileSystems."/persist".neededForBoot = true;
-  
+  # Tmpfs root and require /nix and /persist for boot 
+  fileSystems = {
+    "/" = {
+      device = "tmpfs";
+      fsType = "tmpfs";
+      options = [ "defaults" "size=2G" "mode=755" ];
+    };
+    "/nix".neededForBoot = true;
+    "/persist".neededForBoot = true;
+  };
+
+  # Directories and files to persist across boots
   environment.persistence."/persist" = {
     hideMounts = true;
     
@@ -21,7 +30,6 @@
     
     files = [
       "/etc/machine-id"
-      "/etc/shadow"
       "/etc/ssh/ssh_host_ed25519_key"
       "/etc/ssh/ssh_host_ed25519_key.pub"
       "/etc/ssh/ssh_host_rsa_key"

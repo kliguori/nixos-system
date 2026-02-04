@@ -1,69 +1,97 @@
-{   
-  disk.main = {
-    device = "/dev/disk/by-id/nvme-SAMSUNG_MZVLB512HBJQ-000L7_S4ENNX1R291121";
-    type = "disk";
-    content = {
-      type = "gpt";
-      partitions = {        
-        ESP = {
-          name = "ESP";
-          size = "1G";
-          type = "EF00";
-          content = {
-            type = "filesystem";
-            format = "vfat";
-            mountpoint = "/boot";
-            mountOptions = [
-              "fmask=0022"
-              "dmask=0022"
-            ];
-            extraArgs = [ "-n" "NIXBOOT" ];
+{
+  disk = {
+    # System drive
+    system = {
+      type = "disk";
+      device = "/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_500GB_S5H7NG0N214175Z";
+      content = {
+        type = "gpt";
+        partitions = {
+          ESP = {
+            name = "ESP";
+            size = "1G";
+            type = "EF00";
+            content = {
+              type = "filesystem";
+              format = "vfat";
+              mountpoint = "/boot";
+              mountOptions = [ "fmask=0022" "dmask=0022" ];
+              extraArgs = [ "-n" "NIXBOOT" ];
+            };
+          };
+          system-pool = {
+            name = "system-pool";
+            size = "100%";
+            content = { type = "zfs"; pool = "system-pool"; };
           };
         };
-        zfs = {
-          name = "zfs";
-          size = "100%";
-          content = {
-            type = "zfs";
-            pool = "rpool";
+      };
+    };
+
+    # Home drive 
+    home = {
+      type = "disk";
+      device = "/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_1TB_S4P4NF0M605101P";
+      content = {
+        type = "gpt";
+        partitions = {
+          home-pool = {
+            name = "home-pool";
+            size = "100%";
+            content = { type = "zfs"; pool = "home-pool"; };
           };
         };
       };
     };
   };
-    
-  zpool.rpool = {
-    type = "zpool";
-    options = {
-      ashift = "12";
-      autotrim = "on";
+
+  zpool = {
+    # System pool
+    system-pool = {
+      type = "zpool";
+      options = {
+        ashift = "12";
+        autotrim = "on";
+      };
+      rootFsOptions = {
+        mountpoint = "none";
+        compression = "zstd";
+        atime = "off";
+        xattr = "sa";
+        acltype = "posixacl";
+      };
+      datasets = {
+        nix = {
+          type = "zfs_fs";
+          mountpoint = "/nix";
+          options = { atime = "off"; };
+        };
+        persist = {
+          type = "zfs_fs";
+          mountpoint = "/persist";
+        };
+      };
     };
-    rootFsOptions = {
-      mountpoint = "none";
-      compression = "zstd";
-      atime = "off";
-      xattr = "sa";
-      acltype = "posixacl";
-    };
-    datasets = { 
-      root = {
-        type = "zfs_fs";
-        mountpoint = "/";
-        postCreateHook = "zfs snapshot rpool/root@blank";
-        options = { canmount = "noauto"; };
+
+    # Home pool
+    home-pool = {
+      type = "zpool";
+      options = {
+        ashift = "12";
+        autotrim = "on";
       };
-      nix = {
-        type = "zfs_fs";
-        mountpoint = "/nix";
-        options = { atime = "off"; };
+      rootFsOptions = {
+        mountpoint = "none";
+        compression = "zstd";
+        atime = "off";
+        xattr = "sa";
+        acltype = "posixacl";
       };
-      home = {
-        type = "zfs_fs";
-        mountpoint = "/home";
-      };
-      persist = {
-        type = "zfs_fs";
-        mountpoint = "/persist";
+      datasets = {
+        home = {
+          type = "zfs_fs";
+          mountpoint = "/home";
+        };
       };
     };
   };
