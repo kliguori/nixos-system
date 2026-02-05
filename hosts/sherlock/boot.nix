@@ -9,12 +9,7 @@
     kernelModules = [ "sg" ];
     loader = {
       efi.canTouchEfiVariables = true;
-      systemd-boot = {
-        enable = true;
-        extraInstallCommands = ''
-          chmod 600 $out/loader/random-seed
-        '';
-      };
+      systemd-boot.enable = true;
     };
     supportedFilesystems = [ "zfs" ];
     zfs = {
