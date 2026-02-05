@@ -95,18 +95,26 @@
       datasets = {
         root = {
           type = "zfs_fs";
-          mountpoint = "/";
           postCreateHook = "zfs snapshot rpool/root@blank";
-          options = { canmount = "noauto"; };
+          options = { 
+	    canmount = "noauto";
+	    mountpoint = "legacy";
+	  };
         };
         nix = {
           type = "zfs_fs";
-          mountpoint = "/nix";
-          options = { atime = "off"; };
+          options = { 
+	    atime = "off";
+	    canmount = "noauto";
+	    mountpoint = "legacy";
+	  };
         };
         persist = {
           type = "zfs_fs";
-          mountpoint = "/persist";
+          options = { 
+	    canmount = "noauto";
+	    mountpoint = "legacy";
+	  };
         };
       };
     };
@@ -128,7 +136,10 @@
       datasets = {
         home = {
           type = "zfs_fs";
-          mountpoint = "/home";
+          options = { 
+	    canmount = "noauto";
+	    mountpoint = "legacy";
+	  };
         };
       };
     };
@@ -150,11 +161,17 @@
       datasets = {
         media = {
           type = "zfs_fs";
-          mountpoint = "/srv/media";
+          options = { 
+	    canmount = "noauto";
+	    mountpoint = "legacy";
+	  };
         };
         share = {
           type = "zfs_fs";
-          mountpoint = "/srv/share";
+          options = { 
+	    canmount = "noauto";
+	    mountpoint = "legacy";
+	  };
         };
       };
     };
@@ -176,7 +193,10 @@
       datasets = {
         scratch = {
           type = "zfs_fs";
-          mountpoint = "/scratch";
+          options = { 
+	    canmount = "noauto";
+	    mountpoint = "legacy";
+	  };
         };
       };
     };
