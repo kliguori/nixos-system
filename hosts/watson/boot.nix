@@ -22,8 +22,8 @@
       
       # Rollback to blank root on boot
       postDeviceCommands = lib.mkAfter ''
-        zpool import -N system-pool
-        zpool import -N home-pool
+        zpool import -N -f system-pool
+        zpool import -N -f home-pool
         zfs rollback -r system-pool/root@blank
       '';
     };
