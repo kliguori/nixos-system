@@ -9,6 +9,7 @@
     };
     "/nix".neededForBoot = true;
     "/persist".neededForBoot = true;
+    "/home".neededForBoot = true;
   };
 
   # Directories and files to persist across boots
