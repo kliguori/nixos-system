@@ -1,8 +1,6 @@
 { config, lib, pkgs, ... }:
 
 {
-  fileSystems."/persist".neededForBoot = true;
-  
   environment.persistence."/persist" = {
     hideMounts = true;
     
@@ -21,7 +19,6 @@
     
     files = [
       "/etc/machine-id"
-      "/etc/shadow"
       "/etc/ssh/ssh_host_ed25519_key"
       "/etc/ssh/ssh_host_ed25519_key.pub"
       "/etc/ssh/ssh_host_rsa_key"
