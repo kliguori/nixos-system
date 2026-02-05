@@ -61,14 +61,27 @@
         acltype = "posixacl";
       };
       datasets = {
+        root = {
+          type = "zfs_fs";
+          options = { 
+	    mountpoint = "legacy";
+	    canmount = "noauto";
+	  };
+        };
         nix = {
           type = "zfs_fs";
-          mountpoint = "/nix";
-          options = { atime = "off"; };
+          options = { 
+	    mountpoint = "legacy";
+	    canmount = "noauto";
+	    atime = "off";
+	  };
         };
         persist = {
           type = "zfs_fs";
-          mountpoint = "/persist";
+          options = { 
+	    mountpoint = "legacy";
+	    canmount = "noauto";
+	  };
         };
       };
     };
@@ -90,7 +103,10 @@
       datasets = {
         home = {
           type = "zfs_fs";
-          mountpoint = "/home";
+          options = { 
+	    mountpoint = "legacy";
+	    canmount = "noauto";
+	  };
         };
       };
     };

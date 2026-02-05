@@ -10,17 +10,7 @@
       efi.canTouchEfiVariables = true;
     };
     supportedFilesystems = [ "zfs" ];
-    zfs = {
-      # requestEncryptionCredentials = true; # no zfs encryption right now
-      # forceImportAll = true; 
-      extraPools = [ 
-        "system-pool"
-	"home-pool"
-      ];
-    };
     initrd = {
-      # luks.devices.cryptroot.device = "/dev/disk/by-partlabel/disk-main-cryptroot"; # no luks encryption right now
-      supportedFilesystems = [ "zfs" ];
       availableKernelModules = [
         "nvme"
         "ehci_pci"
@@ -31,10 +21,11 @@
       ];
       
       # Rollback to blank root on boot
-      # postDeviceCommands = lib.mkAfter ''
-      #   zpool import -N rpool
-      #   zfs rollback -r rpool/root@blank
-      # '';
+      postDeviceCommands = lib.mkAfter ''
+        zpool import -N system-pool
+        zpool import -N home-pool
+        zfs rollback -r system-pool/root@blank
+      '';
     };
   };
 }

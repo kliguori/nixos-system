@@ -6,6 +6,7 @@
     inputs.nixos-hardware.nixosModules.common-cpu-intel
     inputs.nixos-hardware.nixosModules.common-pc-laptop
     ./boot.nix
+    ./filesystems.nix
     ./networking.nix
     ./nvidia.nix
     ./impermanence.nix
