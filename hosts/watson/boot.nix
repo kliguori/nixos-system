@@ -9,7 +9,7 @@
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
-    supportedFilesystems = [ "zfs" ];
+    supportedFilesystems = [ "btrfs" ];
     initrd = {
       availableKernelModules = [
         "nvme"
@@ -19,13 +19,6 @@
         "sd_mod"
         "rtsx_pci_sdmmc"
       ];
-      
-      # Rollback to blank root on boot
-      postDeviceCommands = lib.mkAfter ''
-        zpool import -N -f system-pool
-        zpool import -N -f home-pool
-        zfs rollback -r system-pool/root@blank
-      '';
     };
   };
 }

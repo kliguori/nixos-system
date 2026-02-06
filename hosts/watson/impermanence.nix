@@ -1,5 +1,11 @@
 { config, lib, pkgs, ... }:
 {
+  fileSystems ."/" = {
+    device = "system-pool/root";
+    fsType = "zfs";
+    neededForBoot = true;
+  };
+
   environment.persistence."/persist" = {
     hideMounts = true;
     

@@ -19,10 +19,25 @@
               extraArgs = [ "-n" "NIXBOOT" ];
             };
           };
-          system-pool = {
-            name = "system-pool";
+          root = {
+            name = "root";
             size = "100%";
-            content = { type = "zfs"; pool = "system-pool"; };
+            content = {
+              type = "btrfs";
+              extraArgs = [ "-f" "-L" "nixos" ];
+              subvolumes = {
+                "@nix" = {
+                  mountpoint = "/nix";
+                  mountOptions = [ "compress=zstd" "noatime" ];
+                  neededForBoot = true;
+                };
+                "@persist" = {
+                  mountpoint = "/persist";
+                  mountOptions = [ "compress=zstd" ];
+                  neededForBoot = true;
+                };
+              };
+            };
           };
         };
       };
@@ -35,78 +50,20 @@
       content = {
         type = "gpt";
         partitions = {
-          home-pool = {
-            name = "home-pool";
+          home = {
+            name = "home";
             size = "100%";
-            content = { type = "zfs"; pool = "home-pool"; };
+            content = {
+              type = "btrfs";
+              extraArgs = [ "-f" "-L" "home" ];
+              subvolumes = {
+                "@home" = {
+                  mountpoint = "/home";
+                  mountOptions = [ "compress=zstd" ];
+                };
+              };
+            };
           };
-        };
-      };
-    };
-  };
-
-  zpool = {
-    # System pool
-    system-pool = {
-      type = "zpool";
-      options = {
-        ashift = "12";
-        autotrim = "on";
-      };
-      rootFsOptions = {
-        mountpoint = "none";
-        compression = "zstd";
-        atime = "off";
-        xattr = "sa";
-        acltype = "posixacl";
-      };
-      datasets = {
-        root = {
-          type = "zfs_fs";
-          options = { 
-	    mountpoint = "legacy";
-	    canmount = "noauto";
-	  };
-        };
-        nix = {
-          type = "zfs_fs";
-          options = { 
-	    mountpoint = "legacy";
-	    canmount = "noauto";
-	    atime = "off";
-	  };
-        };
-        persist = {
-          type = "zfs_fs";
-          options = { 
-	    mountpoint = "legacy";
-	    canmount = "noauto";
-	  };
-        };
-      };
-    };
-
-    # Home pool
-    home-pool = {
-      type = "zpool";
-      options = {
-        ashift = "12";
-        autotrim = "on";
-      };
-      rootFsOptions = {
-        mountpoint = "none";
-        compression = "zstd";
-        atime = "off";
-        xattr = "sa";
-        acltype = "posixacl";
-      };
-      datasets = {
-        home = {
-          type = "zfs_fs";
-          options = { 
-	    mountpoint = "legacy";
-	    canmount = "noauto";
-	  };
         };
       };
     };
