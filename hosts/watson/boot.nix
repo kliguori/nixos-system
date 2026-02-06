@@ -2,9 +2,7 @@
 {
   # --- Boot settings ---
   boot = {
-    kernelParams = [
-      "zfs.zfs_arc_max=4294967296"  # Limit ZFS ARC to 4GB
-    ];
+    kernelParams = [ ];
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;

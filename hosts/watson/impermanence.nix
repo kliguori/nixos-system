@@ -1,9 +1,9 @@
 { config, lib, pkgs, ... }:
 {
   fileSystems ."/" = {
-    device = "system-pool/root";
-    fsType = "zfs";
-    neededForBoot = true;
+    device = "tmpfs";
+    fsType = "tmpfs";
+    options = [ "defaults" "size=2G" "mode=0755" ];
   };
 
   environment.persistence."/persist" = {
